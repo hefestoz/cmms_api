@@ -27,7 +27,7 @@ class Maquinaria(Base):
     fecha_adquisicion = Column(Date)
     fecha_arranque = Column(Date)
     estado_actual = Column(Enum(EstadoEquipo), default=EstadoEquipo.activo, nullable=False)
-
+    justificacion_criticidad = Column(String(500))
     # Relaciones
     empresa = relationship("Empresa", back_populates="equipos")
     ubicacion = relationship("Ubicacion", back_populates="equipos")

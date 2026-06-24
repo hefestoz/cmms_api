@@ -16,6 +16,7 @@ from app.routers.auth import router as auth_router
 from app.routers.empresas import router as empresas_router
 from app.routers.usuarios import router as usuarios_router
 from app.routers.ubicaciones import router as ubicaciones_router
+from app.routers.maquinaria import router as maquinaria_router
 from app.core.seed import seed_criticidades
 
 @asynccontextmanager
@@ -37,6 +38,7 @@ app.include_router(auth_router)
 app.include_router(empresas_router)
 app.include_router(usuarios_router)
 app.include_router(ubicaciones_router)
+app.include_router(maquinaria_router)
 
 @app.get("/")
 def root():
