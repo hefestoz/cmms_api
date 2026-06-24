@@ -7,6 +7,7 @@ from app.models import Empresa, Usuario, Ubicacion, Criticidad, Maquinaria, Espe
 
 # auth router para autenticación
 from app.routers.auth import router as auth_router
+from app.routers.empresas import router as empresas_router
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -18,6 +19,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="CMMS API", version="1.0.0", lifespan=lifespan)
 app.include_router(auth_router)
+app.include_router(empresas_router)
 
 @app.get("/")
 def root():
