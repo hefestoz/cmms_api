@@ -1,15 +1,22 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from uuid import UUID
+
 from app.database import get_db
 from app.models.usuario import Usuario
 from app.schemas.auth import LoginRequest, TokenResponse
 from app.schemas.usuario import UsuarioCreate, UsuarioResponse
 from app.core.security import hash_password, verify_password, create_access_token
+from app.core.dependencies import get_current_user, get_superadmin
 
 router = APIRouter(prefix="/auth", tags=["Autenticación"])
 
 @router.post("/register", response_model=UsuarioResponse, status_code=201)
-def register(usuario_data: UsuarioCreate, db: Session = Depends(get_db)):
+def register(
+    usuario_data: UsuarioCreate,
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_superadmin)
+):
     existing = db.query(Usuario).filter(Usuario.email == usuario_data.email).first()
     if existing:
         raise HTTPException(
@@ -20,7 +27,8 @@ def register(usuario_data: UsuarioCreate, db: Session = Depends(get_db)):
         nombre=usuario_data.nombre,
         email=usuario_data.email,
         password_hash=hash_password(usuario_data.password),
-        rol=usuario_data.rol
+        rol=usuario_data.rol,
+        empresa_id=usuario_data.empresa_id
     )
     db.add(nuevo_usuario)
     db.commit()
